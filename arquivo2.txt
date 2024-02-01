@@ -1,1 +1,30 @@
-teste
+@Controller
+public class AppController
+{
+    private static final Logger logger = LoggerFactory.getLogger(AppController.class);
+
+    @Autowired
+    private AppService appService;
+    
+    @RequestMapping(value = "/propertiesHistory", method = RequestMethod.POST)
+    public String getPropertiesHistory(@ModelAttribute("propSearchForm") @Validated PropertiesSearch propertiesSearch, BindingResult result, Model model, final RedirectAttributes redirectAttributes)
+    {
+        String instanceName = propertiesSearch.getInstanceName();
+        
+        if (!propertiesSearch.getInstanceName().equalsIgnoreCase("NONE"))
+        {
+            List<String> propVersionDates = appService.getPropertyHistoryDates(instanceName);
+            //Some Businees Logic
+        }
+
+        if (result.hasErrors())
+        {
+            logger.warn("getPropertiesHistory() : Binding error - " + result.getAllErrors());
+        }
+        else
+        {
+            //Some Businees Logic
+        }
+        return "app/prophist";
+    }
+}
